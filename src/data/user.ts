@@ -1,8 +1,23 @@
-export const user  = {
-    "name": "Mike",
-    "email": "mike777@mail.com",
-    "password": "029721275hh",
-    "passwordConfirm": "029721275hh"
+import { faker } from '@faker-js/faker';
+
+export function createRandomUser() {
+    const pass = faker.internet.password();
+    return {
+
+        name: faker.internet.userName(),
+        email: faker.internet.email(),
+        password: pass,
+        passwordConfirm: pass
+
+    };
 }
+
+
+// export const users = faker.helpers.multiple(createRandomUser, {
+//     count: 5,
+// });
+
+
+export const user  = createRandomUser();
 
 //may try use faker for email generation , and good to delete
