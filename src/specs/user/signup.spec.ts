@@ -6,7 +6,7 @@ describe('USER SIGNUP', () => {
 
     describe('positive testing', () => {
 
-        it.skip("Create a new user", async () => {
+        it("Create a new user", async () => {
             const res = await request.post('/users/signup')
                 .send( {
                     "name": "Mike",
@@ -58,7 +58,8 @@ describe('USER SIGNUP', () => {
 
     })
     describe('negative testing', () => {
-        it.only('should not create a new user with existing email', async () => {
+
+        it('should not create a new user with existing email', async () => {
             const res = await request.post('/users/signup')
                 .send( {"name": "Mike",
                 "email": "mike6666@mail.com",
@@ -68,8 +69,66 @@ describe('USER SIGNUP', () => {
             expect(res.body.message).toBe("E11000 duplicate key error collection: test.users index: email_1 dup key: { email: \"mike6666@mail.com\" }");
 
         })
+
+        it('should not create user with invalid email', async () => {
+            const res = await request.post('/users/signup')
+                .send({
+                    "name": "Mike",
+                    "email": "mike.mail.com",
+                    "password": "029721275hh",
+                    "passwordConfirm": "029721275hh"
+                }).expect(500);
+            expect(res.body.status).toBe('error');
+            expect(res.body.message).toBe('User validation failed: email: Please provide a valid email');
+        })
+
+        it('should not create user with empty email', async () => {
+            const res = await request.post('/users/signup')
+                    .send({
+                        "name": "Mike",
+                        "email": "",
+                        "password": "029721275hh",
+                        "passwordConfirm": "029721275hh"
+                    }).expect(500);
+            expect(res.body.status).toBe('error');
+            expect(res.body.message).toBe('User validation failed: email: Please provide your email');
+        })
+
+        it("Should not create user without name", async () =>  {
+            const res = await request.post('/users/signup')
+                .send({
+
+                    "email": "oaculov@gggg.mail",
+                    "password": "029721275hh",
+                    "passwordConfirm": "029721275hh"
+                }).expect(500);
+            expect(res.body.status).toBe('error');
+            expect(res.body.message).toBe('User validation failed: name: Please tell us your name!');
+        })
+
+        it("Should not create user without name", async () =>  {
+            const res = await request.post('/users/signup')
+                .send({
+                    "email": "oaculov@gggg.mail",
+                    "password": "029721275hh",
+                    "passwordConfirm": "029721275hh"
+                }).expect(500);
+            expect(res.body.status).toBe('error');
+            expect(res.body.message).toBe('User validation failed: name: Please tell us your name!');
+        })
+
+        it("Should not create user with different password & passwordConfirm", async () =>  {
+            const res = await request.post('/users/signup')
+                .send({
+                    "name": "derek",
+                    "email": "oaculov@gggg.mail",
+                    "password": "029721275hh",
+                    "passwordConfirm": "029721275"
+                }).expect(500);
+            expect(res.body.status).toBe('error');
+            expect(res.body.message).toBe('User validation failed: passwordConfirm: Passwords are not the same!');  // ask Michail about return err messages
+        })
+
     })
-
-
 
 })

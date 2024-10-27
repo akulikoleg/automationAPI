@@ -11,7 +11,7 @@ export function createRandomUser() {
 
     };
 }
-
+export function getUser(){}
 
 // export const users = faker.helpers.multiple(createRandomUser, {
 //     count: 5,
