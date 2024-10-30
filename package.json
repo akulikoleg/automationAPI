@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "signup": "npx jest src/specs/user/signup.spec.ts"
+    "signup": "npx jest src/specs/user/signup.spec.ts",
+    "login": "npx jest src/specs/user/login.spec.ts"
   },
   "keywords": [],
   "author": "",
