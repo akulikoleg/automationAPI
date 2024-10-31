@@ -6,6 +6,10 @@ const request = supertest("http://localhost:8001/api/v1")
 
 describe('LOGIN', () => {
 
+    afterEach( async () => {
+        await request.delete("users/deleteMe");
+    })
+
     describe('positive testing', () => {
         let user = getUser();
         it('should login user', async () => {
