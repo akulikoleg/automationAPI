@@ -1,13 +1,13 @@
 import * as supertest from 'supertest'
-import {user} from "../../data/user";
+import { getUser } from "../../data/user";
 import {logIn, signUp} from "../../data/helpers";
 const request = supertest("http://localhost:8001/api/v1")
 
 
 describe('LOGIN', () => {
 
-    describe.skip('positive testing', () => {
-
+    describe('positive testing', () => {
+        let user = getUser();
         it('should login user', async () => {
 
             //const loginRes = await request.post("/users/login")
@@ -32,6 +32,7 @@ describe('LOGIN', () => {
 
     describe('negative tests', () => {
 
+        let user = getUser();
 
         it("get error when trying login without password", async () => { // using async await
             const signupRes = await request.post("/users/signup").send(user).expect(201);

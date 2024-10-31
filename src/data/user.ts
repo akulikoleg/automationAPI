@@ -1,6 +1,7 @@
 import { faker } from '@faker-js/faker';
 
-export function createRandomUser() {
+
+export function getUser(){
     const pass = faker.internet.password();
     return {
 
@@ -11,15 +12,10 @@ export function createRandomUser() {
 
     };
 }
-export function getUser(){
-
-}
 
 // export const users = faker.helpers.multiple(createRandomUser, {
 //     count: 5,
 // });
 
-
-export const user  = createRandomUser();
 
 //may try use faker for email generation , and good to delete
