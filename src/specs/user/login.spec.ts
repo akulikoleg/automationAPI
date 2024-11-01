@@ -1,15 +1,15 @@
-import * as supertest from 'supertest'
+import * as supertest from 'supertest';
 import { getUser } from "../../data/user";
 import {logIn, signUp} from "../../data/helpers";
-const request = supertest("http://localhost:8001/api/v1")
+const request = supertest("http://localhost:8001/api/v1");
 
 
 describe('LOGIN', () => {
 
-    afterEach( async () => {
-        await request.delete("users/deleteMe");
-    })
-
+    // afterEach( async () => {
+    //     await request.delete("/deleteMe").send();
+    // })
+// ask Michael about too many request
     describe('positive testing', () => {
         let user = getUser();
         it('should login user', async () => {
@@ -71,7 +71,7 @@ describe('LOGIN', () => {
                     //     return done();
                     // });
 
-             request.post("/users/login")
+            request.post("/users/login")
                      .send({
                          email: user.email,
                          password: "wrongpass"

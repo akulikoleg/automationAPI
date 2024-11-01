@@ -7,19 +7,25 @@ describe('USER SIGNUP', () => {
 
     describe('positive testing', () => {
 
-        const userImport = getUser();
+        let userImport = null;
 
-        //need to delete database before running each test
-        afterEach( async () => {
-            await logIn({
-                "email": userImport.email,
-                "password": userImport.password
-            });
-            await request.delete("users/deleteMe");
-
+        beforeEach(() => {
+             userImport = getUser();
         })
 
-        it.skip("Create a new user", async () => { // only for use without afterEach
+
+        //need to delete database before running each test
+        // afterEach( async () => {
+        //
+        //     await logIn({
+        //         "email": userImport.email,
+        //         "password": userImport.password
+        //     });
+        //     await request.delete("users/deleteMe").send();
+        //
+        // })
+
+        it("Create a new user", async () => { // only for use without afterEach and on clean db
             const res = await request.post('/users/signup')
                 .send( {
                     "name": "Mike",
@@ -36,15 +42,7 @@ describe('USER SIGNUP', () => {
             //console.log(res.body, ':-res');
         })
 
-        it("Create a new user thru import test-data", async () => {
-            const res = await request.post('/users/signup')
-                .send( userImport ).expect(201);
 
-            expect(res.body.data.user.name).toBe(userImport.name);
-            expect(res.body.data.user.email).toBe(userImport.email.toLowerCase()); // it was Jest
-            expect(res.body.status).toBe('success');
-            //console.log(res.body, ':-res');
-        })
 
         // it("Create a new user using faker", async () => {
         //     const res = await request.post('/users/signup')
@@ -56,17 +54,29 @@ describe('USER SIGNUP', () => {
         //     console.log(res.body, ':-res');
         // })
 
-        it.skip("Create a new user using other method async",   function(done) { // not working
-            const res =  request.post('/users/signup')
-                .send( userImport )//.expect(201)
+        it("Create a new user using other method async",   function(done) { // not working
+            request.post('/users/signup')
+                .send( userImport ).expect(201)
                 .end( function(err, res ){
-                    if(err) return done(err);
+                    if(err){
+                        return done(err);
+                    }
                     expect(res.body.data.user.name).toBe(userImport.name);
                     expect(res.body.data.user.email).toBe(userImport.email.toLowerCase()); // it was Jest
                     expect(res.body.status).toBe('success');
-                    return done(res);
+                    return done();
                 })
 
+        })
+
+        it("Create a new user thru import test-data", async () => {
+            const res = await request.post('/users/signup')
+                .send( userImport ).expect(201);
+
+            expect(res.body.data.user.name).toBe(userImport.name);
+            expect(res.body.data.user.email).toBe(userImport.email.toLowerCase()); // it was Jest
+            expect(res.body.status).toBe('success');
+            //console.log(res.body, ':-res');
         })
 
     })
