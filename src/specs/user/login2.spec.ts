@@ -13,18 +13,18 @@ describe('LOGIN', () => {
             await signUp(user);
         })
 
-        afterEach(  () => {
-
-             request.delete("/users/deleteMe").send().set("Authorization", `Bearer ${process.env.JWT}`).then(del => {
+        afterEach(  async () => {
+            await request.delete("/users/deleteMe").send().set("Authorization", `Bearer ${process.env.JWT}`).then(del => {
                 console.log("Deleted!!", del.body)
             });
+
         })
 
-        it('should login user using .then',  () => {
-            logIn({
+        it('should login user using .then',  async () => {
+           await logIn({
                 "email": user.email,
                 "password": user.password
-            }).then(  (res) => {
+            }).then(  res => {
 
                 expect(res.body.status).toBe("success");
                 expect(res.body.data.user.role).toBe("user");
@@ -35,12 +35,12 @@ describe('LOGIN', () => {
 
         });
 
-        it('should login user using try catch',   () => {
+        it('should login user using try catch',  async () => {
             try{
-                logIn({
+               await logIn({
                     "email": user.email,
                     "password": user.password
-                }).then((res1) => {
+                }).then( res1  => {
                     expect(res1.body.status).toBe("success");
                     expect(res1.body.data.user.photo).toBe("default.jpg");
                     expect(res1.body.token).toBeDefined();
@@ -70,7 +70,7 @@ describe('LOGIN', () => {
 
     });
 
-    describe.only('negative tests', () => {
+    describe('negative tests', () => {
 
         let user = getUser();  // ASK MICHAEL if it makes sence use beforeALL and AfterAll
         beforeAll( async() => {
