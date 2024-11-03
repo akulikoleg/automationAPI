@@ -3,9 +3,9 @@ import * as supertest from 'supertest'
 const request = supertest("http://localhost:8001/api/v1");
 
 
-// export async function signUp(user: string | object | undefined){
-//     await request.post("/users/signup").send(user);
-// }
+export  function signUp2(user: string | object | undefined){
+     return  request.post("/users/signup").send(user);
+}
 
 
 export async function signUp(user: string | object | undefined): Promise<any> {
@@ -19,6 +19,9 @@ export async function signUp(user: string | object | undefined): Promise<any> {
            });
     });
 
+}
+export function logIn2(user: object){
+    return request.post("/users/login").send(user);
 }
 
 export async function  logIn( user: object ): Promise<any> {

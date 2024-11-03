@@ -1,8 +1,7 @@
 import * as supertest from 'supertest';
 import { getUser } from "../../data/user";
-import {logIn, signUp} from "../../data/helpers";
+import {logIn, signUp, signUp2} from "../../data/helpers";
 const request = supertest("http://localhost:8001/api/v1");
-
 
 describe('LOGIN', () => {
 
@@ -11,7 +10,9 @@ describe('LOGIN', () => {
     // })
 // ask Michael about too many request
     describe('positive testing', () => {
-        let user = getUser();
+
+        let user = getUser();//make it before each
+
         it('should login user', async () => {
 
             //const loginRes = await request.post("/users/login")
@@ -31,6 +32,65 @@ describe('LOGIN', () => {
             expect(loginRes.body.token).toBeDefined();
             expect(loginRes.body.data.user.name).toBe(user.name);
         });
+
+        it('should login user - option 2 using then', async () => { // rewrite
+
+
+            const signUpRes = await signUp(user);
+            expect(signUpRes.body.status).toBe("success");
+            const loginRes = await logIn({
+                "email": user.email,
+                "password": user.password,
+            })
+
+            expect(loginRes.body.status).toBe("success");
+            expect(loginRes.body.token).toBeDefined();
+            expect(loginRes.body.data.user.name).toBe(user.name);
+        });
+
+        it("login user option 3 using try and cathc", async () => {
+            try{
+                await signUp(user).then((el) => {
+                    expect(el.body.status).toBe("success");
+                })
+                await logIn({
+                    "email": user.email,
+                    "password": user.password,
+                }).then((el2) => {
+                    expect(el2.body.status).toBe("success");
+                })
+            }
+            catch(error){
+                console.log("Error during login process", error)
+            }
+        })
+
+        it("login user option 4 using then",  () => {
+
+           signUp(user).then( res => {
+               expect(res.body.status).toBe("success");
+               return logIn({
+                   "email": user.email,
+                   "password": user.password
+               }).then((res2) => {
+                   expect(res2.statusCode).toBe(200);
+               })
+                   .catch(error => {
+                       console.log( error)
+                   })
+           })
+
+        })
+
+        it.only('login user option 5 using .end without Promise', function(done) {
+            signUp2(user).end( (err, res)=> {  // don't work on signUp because function thru new Promise()
+                if(err) return done(err);
+                expect(res.body.status).toBe("success");
+                done();
+
+            })
+        })
+
 
     });
 
