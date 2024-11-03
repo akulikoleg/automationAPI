@@ -1,17 +1,15 @@
 import * as supertest from 'supertest';
 import { getUser } from "../../data/user";
-import {logIn, signUp, signUp2} from "../../data/helpers";
+import {logIn, logIn2, signUp, signUp2} from "../../data/helpers";
 const request = supertest("http://localhost:8001/api/v1");
 
 describe('LOGIN', () => {
 
-    // afterEach( async () => {
-    //     await request.delete("/deleteMe").send();
-    // })
-// ask Michael about too many request
     describe('positive testing', () => {
-
-        let user = getUser();//make it before each
+        let user = null;
+        beforeEach(async () => {
+             user = getUser();
+        })
 
         it('should login user', async () => {
 
@@ -82,7 +80,7 @@ describe('LOGIN', () => {
 
         })
 
-        it.only('login user option 5 using .end without Promise', function(done) {
+        it('login user option 5 using .end without Promise', function(done) {
             signUp2(user).end( (err, res)=> {  // don't work on signUp because function thru new Promise()
                 if(err) return done(err);
                 expect(res.body.status).toBe("success");
@@ -96,66 +94,68 @@ describe('LOGIN', () => {
 
     describe('negative tests', () => {
 
-        let user = getUser();
+        let user = getUser();  // ASK MICHAEL if it makes sence use beforeALL and AfterAll
+        beforeAll( async() => {
+            await signUp(user);
+        })
 
-        it("get error when trying login without password", async () => { // using async await
-            const signupRes = await request.post("/users/signup").send(user).expect(201);
-            const loginRes = await request.post("/users/login").send({
+        afterAll( async () => {
+            await logIn(user);
+            await request.delete("/users/deleteMe").send().set("Authorization", `Bearer ${process.env.JWT}`).then(del => {
+                console.log("Deleted!!", del.body);
+            });
+        })
+
+        it("get error when trying login without password - using .then()", async () => { // using async await
+
+            await logIn({
                 email: user.email
-            }).expect(400);
-            expect(loginRes.body.message).toBe("Please provide email and password!");
+            }).then( res => {
+                expect(res.statusCode).toBe(400);
+                expect(res.body.message).toBe("Please provide email and password!");
+            }).catch(err => console.log("Error on login stage:" + err));
+
 
         });
 
-        it("get error when trying login without username", () => { // using hooks .then()
+        it("get error when trying login without username using .end()", (done) => { // using hooks .then()
 
-             request.post("/users/signup").send(user).expect(201);
-
-             request.post("/users/login")
-                 .send({
-                     password: user.password
-                 })
-                 .then( el => {
-                     expect(el.body.status).toBe("fail");
-                     expect(el.body.message).toBe("Please provide email and password!");
+            logIn2({ password: user.password })
+                .end( (err, res4) => {
+                    if(err) return done(err);
+                    expect(res4.body.status).toBe("fail");
+                    expect(res4.body.message).toBe("Please provide email and password!");
+                    done();
                 })
 
         });
 
-         it("get error when trying login with wrong password", (done) => {
-
-            request.post("/users/signup").send(user).expect(201);
-                    // .end( (err, res ) => {
-                    //     if(err) return done(err);
-                    //     expect(res.body.status).toBe("success");
-                    //     return done();
-                    // });
+        it("get error when trying login with wrong password", (done) => {
 
             request.post("/users/login")
-                     .send({
-                         email: user.email,
-                         password: "wrongpass"
-                     })
-                    .expect(401)
-                    .end( (err, res) => {
-                        if(err) return done(err);
-                        expect(res.body.status).toBe("fail");
-                        expect(res.body.message).toBe("Incorrect email or password");
-                        return done();
-                    })
+                .send({
+                    email: user.email,
+                    password: "wrongpass"
+                })
+                .expect(401)
+                .end( (err, res) => {
+                    if(err) return done(err);
+                    expect(res.body.status).toBe("fail");
+                    expect(res.body.message).toBe("Incorrect email or password");
+                    return done();
+                })
 
-         });
+        });
 
-       it("get error when trying login with wrong username",  () => {
+        it("get error when trying login with wrong username",  () => {
 
-            request.post("/users/signup").send(user).expect(201);
 
             return new Promise((resolve, reject) => {
                 request
                     .post("/users/login")
                     .send({
-                          email: "wrongemail",
-                          password: user.password
+                        email: "wrongemail",
+                        password: user.password
                     })
                     .expect(401)
                     .end((err, res) => {
@@ -164,10 +164,10 @@ describe('LOGIN', () => {
                         expect(res.body.message).toBe('Incorrect email or password');
                         return resolve(res);
                     })
-           })
+            })
 
-       });
-
+        });
 
     });
+
 });
