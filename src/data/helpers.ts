@@ -38,3 +38,21 @@ export  function  logIn( user: object ): Promise<any> {
 
 }
 
+export function deleteFunction(cookie: string): Promise<any> {
+    return new Promise( (resolve, reject) => {
+        request.delete("/users/deleteMe")
+            .set("Cookie", cookie)
+            .send()
+            .end((err, res) => {
+                if(err) return reject(err);
+                else return resolve(res);
+            })
+    } )
+}
+
+
+export  function deleteFunction2(cookie: [x: string] | null) {
+    return request.delete("/users/deleteMe")
+            .set("Cookie", cookie)
+            .send();
+}
