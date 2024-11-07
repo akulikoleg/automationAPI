@@ -72,7 +72,7 @@ describe('LOGIN', () => {
 
     describe('negative tests', () => {
 
-        let user = getUser();  // ASK MICHAEL if it makes sence use beforeALL and AfterAll
+        let user = getUser();  // ASK Misha if it makes sence use beforeALL and AfterAll
         beforeAll( async() => {
             await signUp(user);
         })

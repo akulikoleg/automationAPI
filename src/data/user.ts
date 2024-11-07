@@ -1,7 +1,7 @@
 import { faker } from '@faker-js/faker';
+import {User} from "./interface"
 
-
-export function getUser(){
+export function getUser(): User {
     const pass = faker.internet.password();
     return {
 
