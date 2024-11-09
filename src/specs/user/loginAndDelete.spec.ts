@@ -68,7 +68,7 @@ describe('user login', () => {
             expect(delResp.body.message).toBe("You are not logged in! Please log in to get access.");
         })
 
-        it.only("can't delete user with invalid endpoint -using try and catch", async () => {
+        it("can't delete user with invalid endpoint -using try and catch", async () => {
 
             try{
                  const delResp =   await request.delete("/users/deleteMe2")
@@ -78,11 +78,11 @@ describe('user login', () => {
                     expect(delResp.statusCode).toBe(403);
                     expect(delResp.body.status).toBe("fail");
                     expect(delResp.body.message).toBe("You do not have permission to perform this action");
-
+                //return delResp;
 
             }
             catch(err){
-                console.error(err + "  Error");
+                throw new Error(`Error :  ${err}`);
             }
         })
 
@@ -95,7 +95,7 @@ describe('user login', () => {
                 expect(delResp.body.message).toBe("You are not logged in! Please log in to get access.");
             }
             catch(err){
-                console.log(err + "  newError");
+                throw new Error(`Test fail due to unexpected error ${err}`);
             }
 
         })
