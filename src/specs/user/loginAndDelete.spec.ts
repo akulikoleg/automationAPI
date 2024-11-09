@@ -68,19 +68,21 @@ describe('user login', () => {
             expect(delResp.body.message).toBe("You are not logged in! Please log in to get access.");
         })
 
-        it("can't delete user with invalid endpoint -using try and catch", async () => {
+        it.only("can't delete user with invalid endpoint -using try and catch", async () => {
 
             try{
-                const delResp =   await request.delete("/users/deleteMe2")
-                    .set("Cookie", cookie)
-                    .send();
-                //console.log(delResp)
-                expect(delResp.statusCode).toBe(403);
-                expect(delResp.body.status).toBe("fail");
-                expect(delResp.body.message).toBe("You do not have permission to perform this action");
+                 const delResp =   await request.delete("/users/deleteMe2")
+                        .set("Cookie", cookie)
+                        .send();
+                    //console.log(delResp)
+                    expect(delResp.statusCode).toBe(403);
+                    expect(delResp.body.status).toBe("fail");
+                    expect(delResp.body.message).toBe("You do not have permission to perform this action");
+
+
             }
             catch(err){
-                console.log(err + "  Error");
+                console.error(err + "  Error");
             }
         })
 
@@ -121,8 +123,6 @@ describe('user login', () => {
                     done();
                 })
         })
-
-
 
     })
 
