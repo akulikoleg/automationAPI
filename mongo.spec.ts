@@ -28,7 +28,7 @@ describe("Mongo_DB",  () => {
         await connection.close();
     })
 
-    it("should find the document", async () => {
+    it.skip("should find the document", async () => { // need to update name before run
         const users = db.collection("users");
         //console.log(users, "=======================users");
         const user = await users.findOne({name: "Verlie47"});
@@ -36,7 +36,7 @@ describe("Mongo_DB",  () => {
         expect(user.name).toEqual("Verlie47");
     })
 
-    it.only("Verify that user was deleted in MongoDB", async () => {
+    it("Verify that user was deleted in MongoDB", async () => {
         const userImport = getUser();
         try{
             const res = await signUp(userImport);
