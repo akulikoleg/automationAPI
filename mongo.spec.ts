@@ -30,7 +30,6 @@ describe("Mongo_DB",  () => {
 
     it.skip("should find the document", async () => { // need to update name before run
         const users = db.collection("users");
-        //console.log(users, "=======================users");
         const user = await users.findOne({name: "Verlie47"});
         console.log(user, "=======================user");
         expect(user.name).toEqual("Verlie47");
@@ -60,12 +59,8 @@ describe("Mongo_DB",  () => {
             expect(deleteData.deletedCount).toEqual(1);
 
         }catch (error){
-            console.log("Error in user delete test");
+            throw new Error("Error in user delete test");
         }
-
-
-
     })
-
 
 });
