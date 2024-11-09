@@ -21,6 +21,7 @@
   "dependencies": {
     "@types/jest": "^29.5.13",
     "@types/supertest": "^6.0.2",
-    "dotenv": "^16.4.5"
+    "dotenv": "^16.4.5",
+    "mongodb": "^6.10.0"
   }
 }
