@@ -56,3 +56,15 @@ export  function deleteFunction2(cookie: [x: string] | null) {
             .set("Cookie", cookie)
             .send();
 }
+
+export async function findUserbyEmail(db, email)
+{
+    const user = await db.collection("users").findOne({"email" : email});
+    if(user){
+        console.log("User found:", user);
+
+    }
+    else{
+        console.log(`No user with email: ${email} found`);
+    }
+}
