@@ -46,7 +46,7 @@ describe('user login', () => {
            cookie = LoginRes.headers["set-cookie"][0];
         })
 
-        it("can't delete user with invalid user -using async await", async () => {
+        it("can't delete user with invalid token -using async await", async () => {
 
             const delResp =   await deleteFunction("wrong");
 
