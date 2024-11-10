@@ -6,12 +6,14 @@ import {findUserbyEmail} from "./src/data/helpers"
 import {User} from "./src/data/interface";
 import {faker} from "@faker-js/faker";
 
+
 const request = supertest("http://localhost:8001/api/v1");
 const {MongoClient, ObjectId} = require('mongodb');
 
 
 
 describe("MongoDB", () => {
+
     let client, db, users_collection, importUser: User;
 
     beforeEach( async () => {
@@ -31,12 +33,14 @@ describe("MongoDB", () => {
             throw new Error("MongoDB connection error: "+ error.message);
 
         }
+   
 
     })
 
     afterEach( async () => {
         await client.close();
     })
+
 
     describe("Positive tests", () => {
 
@@ -137,5 +141,6 @@ describe("MongoDB", () => {
         })
 
     })
+
 
 })
