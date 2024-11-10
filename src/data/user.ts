@@ -5,7 +5,7 @@ export function getUser(): User {
     const pass = faker.internet.password();
     return {
 
-        name: faker.internet.userName(),
+        name: faker.internet.username(),
         email: faker.internet.email(),
         password: pass,
         passwordConfirm: pass
