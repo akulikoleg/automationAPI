@@ -16,7 +16,7 @@ describe("MongoDB", () => {
 
     let client, db, users_collection, importUser: User;
 
-    beforeEach( async () => {
+    beforeAll( async () => {
         importUser = getUser();
         try{
             client = new MongoClient(process.env.DB_URL);
@@ -37,7 +37,7 @@ describe("MongoDB", () => {
 
     })
 
-    afterEach( async () => {
+    afterAll( async () => {
         await client.close();
     })
 
