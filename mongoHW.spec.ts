@@ -71,10 +71,8 @@ describe("MongoDB", () => {
                 // Check if user removed from DB after delete api request
                 await deleteFunction(cookie);
                 const deletedUserFromDB = await users_collection.findOne({email: importUser.email.toLowerCase()});
-                if(deletedUserFromDB == null){
-                    console.log("user deleted successfully!!!");
-                }
-                else throw new Error("Problem with deleting user from Database");
+                expect(deletedUserFromDB).toBeNull();
+
             }catch(error){
                 throw new Error("Error deleting user from Database:" + error);
             }
