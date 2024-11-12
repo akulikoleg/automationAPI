@@ -8,7 +8,20 @@ export function getUser(): User {
         name: faker.internet.username(),
         email: faker.internet.email(),
         password: pass,
-        passwordConfirm: pass
+        passwordConfirm: pass,
+
+    };
+}
+
+export function getUserWithRole(role): User {
+    const pass = faker.internet.password();
+    return {
+
+        name: faker.internet.username(),
+        email: faker.internet.email(),
+        password: pass,
+        passwordConfirm: pass,
+        role: role
 
     };
 }
