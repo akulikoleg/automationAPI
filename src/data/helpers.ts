@@ -1,4 +1,7 @@
 import * as supertest from 'supertest'
+import {getUserWithRole} from "./user";
+import {Tour} from "./interface";
+import {tour} from "./tour";
 
 const request = supertest("http://localhost:8001/api/v1");
 
@@ -66,5 +69,38 @@ export async function findUserbyEmail(db, email)
     }
     else{
         console.log(`No user with email: ${email} found`);
+    }
+}
+
+export async function createTour(role:string, tourImport: Tour ): Promise<any>{
+   try{
+       let userImport =  getUserWithRole(role);
+       const signUpRes = await signUp(userImport);
+       const cookie = signUpRes.headers["set-cookie"];
+       return await request.post("/tours")
+           .set("Cookie", cookie)
+           .send(tourImport);
+   }catch(error){
+       throw new Error("Error creating Tour: "+ error.message);
+   }
+}
+
+export async function createTour2(role:string, tourImport ): Promise<any>{
+    try{
+        let userImport =  getUserWithRole(role);
+        const signUpRes = await signUp(userImport);
+        const cookie = signUpRes.headers["set-cookie"];
+        return new Promise( (resolve, reject) => {
+                request.post("/tours")
+                .set("Cookie", cookie)
+                .send(tourImport)
+                    .end((err, res) => {
+                        if(err) return reject(err);
+                        else return resolve(res);
+                    })
+        })
+
+    }catch(error){
+        throw new Error("Error creating Tour: " + error.message);
     }
 }
