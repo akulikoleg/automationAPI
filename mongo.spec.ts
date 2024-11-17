@@ -63,4 +63,9 @@ describe("Mongo_DB",  () => {
         }
     })
 
+
+    it.only("Get all reviews for the tour", () => {
+
+    })
+
 });

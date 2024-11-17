@@ -1,7 +1,7 @@
 import * as supertest from 'supertest'
 import {getUserWithRole} from "./user";
-import {Tour} from "./interface";
-import {tour} from "./tour";
+import {Review, Tour} from "./interface";
+
 
 const request = supertest("http://localhost:8001/api/v1");
 
@@ -13,12 +13,12 @@ export  function signUp2(user: string | object | undefined){
 
 export async function signUp(user: string | object | undefined): Promise<any> {
 
-    return new Promise((resolve, reject) => {
+    return new Promise((fulfilled, reject) => {
        request.post("/users/signup")
            .send(user)
            .end((err, res)=> {
                if (err) return reject(err);
-               return resolve(res);
+               return fulfilled(res);
            });
     });
 
@@ -72,14 +72,17 @@ export async function findUserbyEmail(db, email)
     }
 }
 
-export async function createTour(role:string, tourImport: Tour ): Promise<any>{
+export async function createTour(cookie:string, tourImport: Tour ): Promise<any>{
    try{
-       let userImport =  getUserWithRole(role);
-       const signUpRes = await signUp(userImport);
-       const cookie = signUpRes.headers["set-cookie"];
-       return await request.post("/tours")
-           .set("Cookie", cookie)
-           .send(tourImport);
+       return new Promise((resolve, reject) => {
+           request.post("/tours")
+                  .set("Cookie", cookie)
+                  .send(tourImport)
+                  .end((err, res) => {
+                   if(err) return reject(err);
+                   else return resolve(res);
+                  })
+       })
    }catch(error){
        throw new Error("Error creating Tour: "+ error.message);
    }
@@ -103,4 +106,35 @@ export async function createTour2(role:string, tourImport ): Promise<any>{
     }catch(error){
         throw new Error("Error creating Tour: " + error.message);
     }
+}
+
+export async function createReview(cookie: string, review): Promise<any>{ // this one from Michael
+
+    try{
+        return new Promise( (resolve, reject) => {
+            request.post("/reviews")
+                .set("Cookie", cookie)
+                .send(review)
+                .end((err, res) => {
+                    if(err) return reject(err);
+                    else return resolve(res);
+                })
+        })
+
+    }catch(error){
+        throw new Error("Error creating review: " + error.message);
+    }
+}
+
+export async function getAllReviewsOfTour(tour_id: string, cookie: string) : Promise<any>{
+    return new Promise( (resolve, reject) => {
+        request.get(`/tours/${tour_id}/reviews`)
+            .set("Cookie", cookie)
+            .send()
+            .end((err, res) => {
+                if(err) return reject(err);
+                else  resolve(res);
+            })
+    })
+
 }
