@@ -53,7 +53,7 @@ describe('Tours', () => {
         it("Create tour - using function", async () => {
           try{
                let tourImport =  tour();
-               const createTourResponse = await createTour("admin", tourImport);
+               const createTourResponse = await createTour2("admin", tourImport);
                expect(createTourResponse.body.status).toBe("success");
                expect(createTourResponse.body.data.data.name).toEqual(tourImport.name);
            }catch(error){
@@ -66,7 +66,7 @@ describe('Tours', () => {
         it("Create tour - using function with lead-guide role", async () => {
             try{
                  let tourImport =  tour();
-                const createTourResponse = await createTour("lead-guide", tourImport);
+                const createTourResponse = await createTour2("lead-guide", tourImport); // incorrect because for feature test need to fetch id from signup separate
                 expect(createTourResponse.body.status).toBe("success");
                 expect(createTourResponse.body.data.data.name.trim()).toEqual(tourImport.name);
             }catch(error){

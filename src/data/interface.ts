@@ -35,3 +35,9 @@ export interface Tour {
     reviews?: string
 }
 
+export interface Review{
+    review: string;
+    rating: number;
+    tour: string;
+    user: string;
+}
